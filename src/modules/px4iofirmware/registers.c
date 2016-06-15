@@ -186,7 +186,8 @@ volatile uint16_t	r_page_setup[] = {
 	[PX4IO_P_SETUP_PWM_REVERSE] = 0,
 	[PX4IO_P_SETUP_TRIM_ROLL] = 0,
 	[PX4IO_P_SETUP_TRIM_PITCH] = 0,
-	[PX4IO_P_SETUP_TRIM_YAW] = 0
+	[PX4IO_P_SETUP_TRIM_YAW] = 0,
+	[PX4IO_P_SETUP_HEATER_DUTY_CYCLE] = PX4IO_HEATER_DISABLE,
 };
 
 #ifdef CONFIG_ARCH_BOARD_PX4IO_V2
@@ -743,6 +744,10 @@ registers_set_one(uint8_t page, uint8_t offset, uint16_t value)
 		case PX4IO_P_SETUP_SBUS_RATE:
 			r_page_setup[offset] = value;
 			sbus1_set_output_rate_hz(value);
+			break;
+
+		case PX4IO_P_SETUP_HEATER_DUTY_CYCLE:
+			r_page_setup[offset] = value;
 			break;
 
 		default:
