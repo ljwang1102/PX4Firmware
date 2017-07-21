@@ -78,6 +78,7 @@
 /*
  * Registers.
  */
+extern uint16_t			r_page_config[];	/* PX4IO_PAGE_CONFIG */
 extern uint16_t			r_page_status[];	/* PX4IO_PAGE_STATUS */
 extern uint16_t			r_page_actuators[];	/* PX4IO_PAGE_ACTUATORS */
 extern uint16_t			r_page_servos[];	/* PX4IO_PAGE_SERVOS */
@@ -93,6 +94,7 @@ extern uint16_t			r_page_servo_failsafe[]; /* PX4IO_PAGE_FAILSAFE_PWM */
 extern uint16_t			r_page_servo_control_min[]; /* PX4IO_PAGE_CONTROL_MIN_PWM */
 extern uint16_t			r_page_servo_control_max[]; /* PX4IO_PAGE_CONTROL_MAX_PWM */
 extern uint16_t			r_page_servo_disarmed[];	/* PX4IO_PAGE_DISARMED_PWM */
+
 
 /*
  * Register aliases.
@@ -150,6 +152,11 @@ extern struct sys_state_s system_state;
  * PWM limit structure
  */
 extern pwm_limit_t pwm_limit;
+
+/*
+  counter for heater, preventing stuck FMU
+ */
+extern uint64_t last_heater_us;
 
 /*
  * GPIO handling.

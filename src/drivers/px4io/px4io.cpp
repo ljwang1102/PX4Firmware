@@ -1737,7 +1737,7 @@ PX4IO::io_get_status()
 	io_handle_battery(regs[2], regs[3]);
 #endif
 
-#ifdef CONFIG_ARCH_BOARD_PX4FMU_V2
+#if defined(CONFIG_ARCH_BOARD_PX4FMU_V2) || defined (CONFIG_ARCH_BOARD_PX4FMU_V4PRO) 
 	io_handle_vservo(regs[4], regs[5]);
 #endif
 
@@ -2009,7 +2009,7 @@ PX4IO::io_reg_modify(uint8_t page, uint8_t offset, uint16_t clearbits, uint16_t 
 int
 PX4IO::print_debug()
 {
-#ifdef CONFIG_ARCH_BOARD_PX4FMU_V2
+#if defined(CONFIG_ARCH_BOARD_PX4FMU_V2) || defined (CONFIG_ARCH_BOARD_PX4FMU_V4PRO) 
 	int io_fd = -1;
 
 	if (io_fd <= 0) {
@@ -2230,7 +2230,7 @@ PX4IO::print_status(bool extended_status)
 		       (double)_battery_amp_bias,
 		       (double)_battery_mamphour_total);
 
-	} else if (_hardware == 2) {
+	} else if (_hardware >= 2) {
 		printf("vservo %u mV vservo scale %u\n",
 		       io_reg_get(PX4IO_PAGE_STATUS, PX4IO_P_STATUS_VSERVO),
 		       io_reg_get(PX4IO_PAGE_SETUP, PX4IO_P_SETUP_VSERVO_SCALE));
@@ -2274,6 +2274,8 @@ PX4IO::print_status(bool extended_status)
 	for (unsigned i = 0; i < raw_inputs; i++) {
 		printf(" %u", io_reg_get(PX4IO_PAGE_RAW_RC_INPUT, PX4IO_P_RAW_RC_BASE + i));
 	}
+
+    printf(" NRSSI:%u", io_reg_get(PX4IO_PAGE_RAW_RC_INPUT, PX4IO_P_RAW_RC_NRSSI));
 
 	printf("\n");
 
@@ -2343,7 +2345,7 @@ PX4IO::print_status(bool extended_status)
 	       io_reg_get(PX4IO_PAGE_SETUP, PX4IO_P_SETUP_PWM_ALTRATE),
 	       io_reg_get(PX4IO_PAGE_SETUP, PX4IO_P_SETUP_RELAYS));
 #endif
-#ifdef CONFIG_ARCH_BOARD_PX4FMU_V2
+#if defined(CONFIG_ARCH_BOARD_PX4FMU_V2) || defined (CONFIG_ARCH_BOARD_PX4FMU_V4PRO) 
 	printf("rates 0x%04x default %u alt %u sbus %u ignore_safety 0x%04x\n",
 	       io_reg_get(PX4IO_PAGE_SETUP, PX4IO_P_SETUP_PWM_RATES),
 	       io_reg_get(PX4IO_PAGE_SETUP, PX4IO_P_SETUP_PWM_DEFAULTRATE),
@@ -2739,7 +2741,7 @@ PX4IO::ioctl(file *filep, int cmd, unsigned long arg)
 
 			ret = io_reg_modify(PX4IO_PAGE_SETUP, PX4IO_P_SETUP_RELAYS, bits, 0);
 #endif
-#ifdef CONFIG_ARCH_BOARD_PX4FMU_V2
+#if defined(CONFIG_ARCH_BOARD_PX4FMU_V2) || defined (CONFIG_ARCH_BOARD_PX4FMU_V4PRO) 
 			ret = -EINVAL;
 #endif
 			break;
@@ -2757,7 +2759,7 @@ PX4IO::ioctl(file *filep, int cmd, unsigned long arg)
 
 		ret = io_reg_modify(PX4IO_PAGE_SETUP, PX4IO_P_SETUP_RELAYS, 0, arg);
 #endif
-#ifdef CONFIG_ARCH_BOARD_PX4FMU_V2
+#if defined(CONFIG_ARCH_BOARD_PX4FMU_V2) || defined (CONFIG_ARCH_BOARD_PX4FMU_V4PRO) 
 		ret = -EINVAL;
 #endif
 		break;
@@ -2774,7 +2776,7 @@ PX4IO::ioctl(file *filep, int cmd, unsigned long arg)
 
 		ret = io_reg_modify(PX4IO_PAGE_SETUP, PX4IO_P_SETUP_RELAYS, arg, 0);
 #endif
-#ifdef CONFIG_ARCH_BOARD_PX4FMU_V2
+#if defined(CONFIG_ARCH_BOARD_PX4FMU_V2) || defined (CONFIG_ARCH_BOARD_PX4FMU_V4PRO) 
 		ret = -EINVAL;
 #endif
 		break;
@@ -2788,7 +2790,7 @@ PX4IO::ioctl(file *filep, int cmd, unsigned long arg)
 		}
 
 #endif
-#ifdef CONFIG_ARCH_BOARD_PX4FMU_V2
+#if defined(CONFIG_ARCH_BOARD_PX4FMU_V2) || defined (CONFIG_ARCH_BOARD_PX4FMU_V4PRO) 
 		ret = -EINVAL;
 #endif
 		break;
@@ -3550,7 +3552,7 @@ px4io_main(int argc, char *argv[])
 			fn[1] =	"/fs/microsd/px4io1.bin";
 			fn[2] =	"/fs/microsd/px4io.bin";
 			fn[3] =	nullptr;
-#elif defined(CONFIG_ARCH_BOARD_PX4FMU_V2)
+#elif defined(CONFIG_ARCH_BOARD_PX4FMU_V2) || defined(CONFIG_ARCH_BOARD_PX4FMU_V4PRO)
 			fn[0] = "/etc/extras/px4io-v2.bin";
 			fn[1] =	"/fs/microsd/px4io2.bin";
 			fn[2] =	"/fs/microsd/px4io.bin";

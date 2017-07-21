@@ -63,7 +63,7 @@ static void	pwm_configure_clock(uint16_t map, uint16_t clock_MHz);
  *
  * Static configuration parameters.
  */
-static const uint16_t	r_page_config[] = {
+uint16_t	r_page_config[] = {
 	[PX4IO_P_CONFIG_PROTOCOL_VERSION]	= PX4IO_PROTOCOL_VERSION,
 #ifdef CONFIG_ARCH_BOARD_PX4IO_V2
 	[PX4IO_P_CONFIG_HARDWARE_VERSION]	= 2,
@@ -768,6 +768,7 @@ registers_set_one(uint8_t page, uint8_t offset, uint16_t value)
 			break;
 
 		case PX4IO_P_SETUP_HEATER_DUTY_CYCLE:
+			last_heater_us = hrt_absolute_time();
 			r_page_setup[offset] = value;
 			break;
 
@@ -1162,3 +1163,4 @@ pwm_configure_clock(uint16_t map, uint16_t clock_MHz)
         }
     }
 }
+
